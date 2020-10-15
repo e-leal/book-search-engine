@@ -54,6 +54,7 @@ const resolvers = {
       },
       saveBook: async (parent, {authors, description, title, bookId, image, link}) => {
           if(context.user){
+              console.log("context user is: ", context.user);
             const book = await Book.create({authors, description, title, bookId, image, link});
 
             await User.findByIdAndUpdate(
@@ -61,6 +62,7 @@ const resolvers = {
                 { $push: {books: book._id}},
                 {new: true}
             );
+            console.log("Our book is: ", book);
             return book;
           }
           throw new AuthenticationError('You need to be logged in!');
