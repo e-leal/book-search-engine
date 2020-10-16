@@ -7,14 +7,16 @@ const expiration = '2h';
 module.exports = {
   // function for our authenticated routes
   authMiddleware: function (req, res, next) {
-    //console.log("The req is: ",req)
-    console.log("authorization token: ", req.headers.authorization);
-
+    console.log("The req is: ",req.headers)
+    //console.log("authorization token: ", req.headers.authorization);
+    console.log("Our token result is: HERE");
+    //console.log("our token result is: ",(req.body.token || req.query.token || req.headers.authorization));
     // allows token to be sent via  req.body, req.query or headers
     let token = req.body.token || req.query.token || req.headers.authorization;
-    console.log("body token: ", req.body.token);
-    console.log("query token: ", req.query.token);
-    console.log("authorization token: ", req.headers.authorization);
+    // console.log("body token: ", req.body.token);
+    // console.log("query token: ", req.query.token);
+    // console.log("authorization token: ", req.headers.authorization);
+    console.log("Our token is: ", token);
     // ["Bearer", "<tokenvalue>"]
     if (req.headers.authorization) {
       
@@ -42,8 +44,8 @@ module.exports = {
     // return updated request object
     return req;
   },
-  signToken: function ({ username, email, _id }) {
-    const payload = { username, email, _id };
+  signToken: function ({ username, email}) {
+    const payload = { username, email };
     console.log("my payload is: ", payload)
     return jwt.sign({ data: payload }, secret, { expiresIn: expiration });
   }

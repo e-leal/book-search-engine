@@ -40,6 +40,7 @@ module.exports = {
       return res.status(400).json({ message: 'Wrong password!' });
     }
     const token = signToken(user);
+    console.log("we've got a token in our user controller: ", token);
     res.json({ token, user });
   },
   // save a book to a user's `savedBooks` field by adding it to the set (to prevent duplicates)

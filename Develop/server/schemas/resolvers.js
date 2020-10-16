@@ -38,9 +38,13 @@ const resolvers = {
             //return user;
             return { user, token };
           },
-      login: async (parent, {email, password}) => {
-        const user = await User.findOne({email});
+      login: async (parent, {userEmail, userPassword}) => {
+          console.log("our email : ", userEmail, " & password are: ", userPassword);
+        const user = await User.findOne({email : userEmail});
+        console.log("our user object found by email is: ", user);
+        const token = signToken(user);
         console.log("login user is: ",user)
+        console.log("sign in token is: ", token);
         if(!user){
             throw new AuthenticationError('Incorrect Credentials');
         }
@@ -49,7 +53,6 @@ const resolvers = {
         if(!correctPw){
             throw new AuthenticationError('Incorrect Password!');
         }
-        const token = signToken(user);
         return {token, user};
       },
       saveBook: async (parent, {authors, description, title, bookId, image, link}) => {

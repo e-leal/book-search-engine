@@ -1,9 +1,9 @@
-import { useMutation } from '@apollo/react-hooks';
+import { useMutation, useParams } from '@apollo/react-hooks';
 // see SignupForm.js for comments
 import React, { useState } from 'react';
 import { Form, Button, Alert } from 'react-bootstrap';
 
-import { loginUser } from '../utils/API';
+//import { loginUser } from '../utils/API';
 import Auth from '../utils/auth';
 import {LOGIN_USER} from '../utils/mutations';
 
@@ -11,7 +11,14 @@ const LoginForm = () => {
   const [userFormData, setUserFormData] = useState({ email: '', password: '' });
   const [validated] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
-  const [loginUser, {error}] = useMutation(LOGIN_USER);
+  // const { email: email, password: password } = useParams();
+
+  //     const { loading, data } = useMutation(LOGIN_USER, {
+  //       variables: { email: email, password: password }
+  //     });
+
+  //     const authObj = data?.auth || {};
+  const [login, {error}] = useMutation(LOGIN_USER);
   const handleInputChange = (event) => {
     const { name, value } = event.target;
     setUserFormData({ ...userFormData, [name]: value });
@@ -28,18 +35,24 @@ const LoginForm = () => {
     }
 
     try {
-      const { data } =  await loginUser({
-          variables: {email: userFormData.email, password: userFormData.password}
+      
+      console.log("our userform data is: ", userFormData);
+      //let userEmail = userFormData.email;
+      //let userPass = userFormData.password;
+      
+      const { data } =  await login({
+          variables: {...userFormData}
        });
-       console.log("our login data result is: ", data);
-      const response = await loginUser(userFormData);
+     // const response = await loginUser(userFormData);
+      console.log("our login data result is: ", data);
 
-      if (!response.ok) {
+      if (!data.ok) {
         throw new Error('something went wrong!');
       }
 
-      const { token, user } = await response.json();
-      console.log(user);
+      const { token, user } = await data.json();
+      console.log("The user is: ",user);
+      console.log("The token is: ",token);
       Auth.login(token);
     } catch (err) {
       console.error(err);

@@ -3,9 +3,11 @@ import gql from 'graphql-tag';
 export const LOGIN_USER = gql`
 mutation login($email: String!, $password: String!) {
     login(email: $email, password: $password) {
-      _id
-      username
-      email
+      token
+      user{
+          _id
+          username        
+      }
     }
 }
 `;
@@ -16,8 +18,7 @@ mutation addUser($username: String!, $email: String!, $password: String!){
         token
         user {
             _id
-            username
-            email
+            username           
         }
     }
 }
