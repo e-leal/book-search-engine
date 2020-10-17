@@ -2,7 +2,6 @@ const { AuthenticationError } = require('apollo-server-express');
 const { User } = require('../models');
 const { signToken } = require('../utils/auth');
 
-const {authenticationError} = require('apollo-server-express');
 
 const resolvers = {
     Query: {
@@ -15,36 +14,23 @@ const resolvers = {
                 return userData;
             }
             throw new AuthenticationError('Not logged in');
-        },
-        users: async () => {
-            return User.find();
-        },
-        user: async (parent, {email}) => {
-            return User.findOne({email});
-        },
-        books: async () => {
-            return Book.find();
-          },
-          book: async (parent, { title }) => {
-            return Book.findOne({ title });
-          }
+        }
+        
     },
     Mutation: {
         addUser: async (parent, args) => {
             const user = await User.create(args);
-            console.log("addUser user is: ",user)
+
             const token = signToken(user);
             console.log(token);
             //return user;
             return { user, token };
           },
-      login: async (parent, {userEmail, userPassword}) => {
-          console.log("our email : ", userEmail, " & password are: ", userPassword);
-        const user = await User.findOne({email : userEmail});
-        console.log("our user object found by email is: ", user);
+      login: async (parent, { email, password }) => {
+        const user = await User.findOne({ email });
+
         const token = signToken(user);
-        console.log("login user is: ",user)
-        console.log("sign in token is: ", token);
+
         if(!user){
             throw new AuthenticationError('Incorrect Credentials');
         }
