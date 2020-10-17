@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Jumbotron, Container, Col, Form, Button, Card, CardColumns } from 'react-bootstrap';
 import Auth from '../utils/auth';
-import { saveBook, searchGoogleBooks } from '../utils/API';
+import { searchGoogleBooks } from '../utils/API';
 import { saveBookIds, getSavedBookIds } from '../utils/localStorage';
 //import {REMOVE_BOOK, SAVE_BOOK, ADD_USER, LOGIN_USER} from '../utils/mutations';
 import { useMutation, useQuery } from '@apollo/react-hooks';
@@ -60,12 +60,7 @@ const SearchBooks = () => {
     // find the book in `searchedBooks` state by the matching id
     const bookToSave = searchedBooks.find((book) => book.bookId === bookId);
     console.log("Book to save: ", bookToSave);
-    let authorArr = bookToSave.authors
-    let saveBookId = bookToSave.bookId
-    let saveTitle = bookToSave.title
-    let saveDesc = bookToSave.description
-    let saveImg = bookToSave.image
-    let saveLink = bookToSave.link
+    
     // get token
     const token = Auth.loggedIn() ? Auth.getToken() : null;
     console.log("The token is: ", token);
@@ -78,14 +73,14 @@ const SearchBooks = () => {
       //const {authors: bookToSave.authors, description: $description, title: $title, bookId: $bookId, image: $image, link: $link}
       //const {authors: authorArr} = useParams();
       const { data } =  await saveBook({
-        variables: {...bookToSave}
+        variables: {bookData: {...bookToSave}},
       });
       console.log("My lovely data: ", data);
-      const response = await saveBook(bookToSave, token);
-      console.log("our response is: ", response);
-      if (!response.ok) {
-        throw new Error('something went wrong!');
-      }
+      //const response = await saveBook(bookToSave, token);
+      //console.log("our response is: ", response);
+      // if (!response.ok) {
+      //   throw new Error('something went wrong!');
+      // }
 
       // if book successfully saves to user's account, save book id to state
       setSavedBookIds([...savedBookIds, bookToSave.bookId]);

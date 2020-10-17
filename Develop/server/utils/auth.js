@@ -29,7 +29,7 @@ module.exports = {
       console.log("we made it all the way to jwt verify!: ", req.user);
     } catch {
       console.log('Invalid token');
-      return res.status(400).json({ message: 'invalid token!' });
+      //return res.status(400).json({ message: 'invalid token!' });
     }
 
 
