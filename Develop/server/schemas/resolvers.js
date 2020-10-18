@@ -46,7 +46,7 @@ const resolvers = {
               console.log("context user is: ", context.user);
             //const book = await Book.create({bookData});
 
-           const updateUser = await User.findByIdAndUpdate(
+           const updateUser = await User.findOneAndUpdate(
                 {_id: context.user._id},
                 { $push: {savedBooks: bookData}},
                 {new: true}
@@ -56,8 +56,16 @@ const resolvers = {
           }
           throw new AuthenticationError('You need to be logged in!');
     },
-      removeBook: async (parent, {bookId})=>{
-          Book.findOneAndDelete({bookId});
+      removeBook: async (parent, {bookId}, context)=>{
+          if(context.user){
+              const updateUser = await User.findOneAndUpdate(
+                  {_id: context.user._id},
+                  {$pull: {savedBooks: {bookId}}},
+                  {new: true}
+              );
+              return updateUser;
+          }
+          throw new AuthenticationError('Please log in before removing a book!')
       }
     }
   };
