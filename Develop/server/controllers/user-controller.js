@@ -29,7 +29,6 @@ module.exports = {
   // login a user, sign a token, and send it back (to client/src/components/LoginForm.js)
   // {body} is destructured req.body
   async login({ body }, res) {
-    console.log("We're in the user controller login");
 
     const user = await User.findOne({ $or: [{ username: body.username }, { email: body.email }] });
     if (!user) {

@@ -63,24 +63,15 @@ const SearchBooks = () => {
     
     // get token
     const token = Auth.loggedIn() ? Auth.getToken() : null;
-    console.log("The token is: ", token);
     if (!token) {
-      console.log("we're going to return false");
       return false;
     }
 
     try {
-      //const {authors: bookToSave.authors, description: $description, title: $title, bookId: $bookId, image: $image, link: $link}
-      //const {authors: authorArr} = useParams();
       const { data } =  await saveBook({
         variables: {bookData: {...bookToSave}},
       });
       console.log("My lovely data: ", data);
-      //const response = await saveBook(bookToSave, token);
-      //console.log("our response is: ", response);
-      // if (!response.ok) {
-      //   throw new Error('something went wrong!');
-      // }
 
       // if book successfully saves to user's account, save book id to state
       setSavedBookIds([...savedBookIds, bookToSave.bookId]);

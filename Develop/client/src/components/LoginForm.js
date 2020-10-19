@@ -30,7 +30,6 @@ const LoginForm = () => {
 
   const handleFormSubmit = async (event) => {
     event.preventDefault();
-    console.log("Rainbow bepper");
     const form = event.currentTarget;
     if (form.checkValidity() === false) {
       event.preventDefault();
@@ -38,7 +37,6 @@ const LoginForm = () => {
     }
 
     try {
-      console.log("our userform data is: ", userFormData);
 
       const { data } = await login({
         variables: { ...userFormData },

@@ -21,7 +21,6 @@ const resolvers = {
             const user = await User.create(args);
 
             const token = signToken(user);
-            console.log(token);
             //return user;
             return { user, token };
           },
@@ -42,7 +41,6 @@ const resolvers = {
       },
       saveBook: async (parent, { bookData }, context) => {
           if(context.user){
-              console.log("context user is: ", context.user);
             //const book = await Book.create({bookData});
 
            const updateUser = await User.findOneAndUpdate(
@@ -50,7 +48,6 @@ const resolvers = {
                 { $push: {savedBooks: bookData}},
                 {new: true}
             );
-            console.log("Our book is: ", book);
             return updateUser;
           }
           throw new AuthenticationError('You need to be logged in!');
